@@ -101,7 +101,13 @@ class XcdrClient
             $this->requestXcdrSetAttribute($result, $schema);
         }
 
-        return $result;
+        if (array_key_exists('providerStatus', $result)) {
+            $response = $host . ' registered with status of ' . $result['providerStatus'];
+        } else {
+            $response = $host . ' returned with an unknown registration status';
+        }
+
+        return $response;
     }
 
     /**
