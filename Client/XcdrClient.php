@@ -47,14 +47,14 @@ class XcdrClient
     /**
      * Cisco IOS XCDR Provider Registration
      */
-    public function requestXcdrRegister($host)
+    public function requestXcdrRegister($host, $appUrl)
     {
         $protocol = array_key_exists('protocol', $this->options) ? $this->options['protocol'] : 'http';
         $url = $protocol . '://' . $host . ':8090/cisco_xcdr';
         $schema = XcdrHandler::XCDR_SCHEMA;
         $appName = $this->options['app_name'];
-        $appProtocol = array_key_exists('app_protocol', $this->options) ? $this->options['app_protocol'] : 'http';
-        $appUrl = $appProtocol . '://' . $this->options['app_host'] . ':80/wsapi/xcdr';
+        //$appProtocol = array_key_exists('app_protocol', $this->options) ? $this->options['app_protocol'] : 'http';
+        //$appUrl = $appProtocol . '://' . $this->options['app_host'] . ':80/wsapi/xcdr';
         $uniqueId = uniqid('xcdr');
 
         $socket = array_key_exists('socket', $this->options) ? $this->options['socket'] : 5;
