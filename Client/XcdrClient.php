@@ -49,20 +49,20 @@ class XcdrClient
      */
     public function requestXcdrRegister($host)
     {
-        $protocol = array_key_exists($this->options, 'protocol') ? $this->options['protocol'] : 'http';
+        $protocol = array_key_exists('protocol', $this->options) ? $this->options['protocol'] : 'http';
         $url = $protocol . '://' . $host . ':8090/cisco_xcdr';
         $schema = XcdrHandler::XCDR_SCHEMA;
         $appName = $this->options['app_name'];
-        $appProtocol = array_key_exists($this->options, 'app_protocol') ? $this->options['app_protocol'] : 'http';
+        $appProtocol = array_key_exists('app_protocol', $this->options) ? $this->options['app_protocol'] : 'http';
         $appUrl = $appProtocol . '://' . $this->options['app_host'] . ':80/wsapi/xcdr';
         $uniqueId = uniqid('xcdr');
 
-        $socket = array_key_exists($this->options, 'socket') ? $this->options['socket'] : 5;
+        $socket = array_key_exists('socket', $this->options) ? $this->options['socket'] : 5;
         ini_set('default_socket_timeout', $socket);
 
-        $connection = array_key_exists($this->options, 'connection') ? $this->options['connection'] : 5;
-        $trace = array_key_exists($this->options, 'trace') ? $this->options['trace'] : false;
-        $exception = array_key_exists($this->options, 'exception') ? $this->options['exception'] : false;
+        $connection = array_key_exists('connection', $this->options) ? $this->options['connection'] : 5;
+        $trace = array_key_exists('trace', $this->options) ? $this->options['trace'] : false;
+        $exception = array_key_exists('exception', $this->options) ? $this->options['exception'] : false;
 
         $this->soapClient = new WsApiClient(null, array(
             "location" => $url,
@@ -95,7 +95,7 @@ class XcdrClient
             return $soapFault;
         }
 
-        $cdrFormat = array_key_exists($this->options, 'cdr_format') ? $this->options['cdr_format'] : 'compact';
+        $cdrFormat = array_key_exists('cdr_format', $this->options) ? $this->options['cdr_format'] : 'compact';
 
         if ($cdrFormat === 'detailed') {
             $this->requestXcdrSetAttribute($result, $schema);
