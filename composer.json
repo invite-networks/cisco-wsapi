@@ -1,0 +1,23 @@
+{
+    "name": "invite/cisco-wsapi",
+    "type": "library",
+    "description": "PHP Library for Cisco Systems IOS UC Gateway API",
+    "keywords": ["cisco", "voip", "wsapi", "ios"],
+    "homepage": "https://github.com/invite-networks/cisco-wsapi",
+    "license": "MIT",
+    "authors": [
+	{
+	    "name": "Josh Whiting",
+	    "email": "josh@invitenetworks.com",
+	    "homepage": "http://www.invitenetworks.com"
+	}
+    ],
+    "require": {
+	"php": ">=5.3.3",
+	"ext-soap": "*"
+    },
+    "autoload": {
+	"psr-0": {"Invite\\Component\\Cisco\\Wsapi": ""}
+    },
+    "target-dir": "Invite/Component/Cisco/Wsapi"
+}
