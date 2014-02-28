@@ -119,7 +119,7 @@ class XcdrHandler
             'cdr' => $cdr
         );
 
-        $this->xcdrListener->processCdrRecord2($data);
+        $this->xcdrListener->processCdrRecord($data);
     }
 
 }
