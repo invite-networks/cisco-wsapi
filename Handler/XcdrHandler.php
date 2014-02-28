@@ -28,7 +28,7 @@ class XcdrHandler
      * Cisco Xcdr api xml schema
      */
 
-    const XCDR_SCHEMA = 'http://www.cisco.com/schema/cisco_xcdr/v1_0/';
+    const XCDR_SCHEMA = 'http://www.cisco.com/schema/cisco_xcdr/v1_0';
 
     /**
      * @var \Invite\Component\Cisco\Wsapi\Model\XcdrListenerInterface
