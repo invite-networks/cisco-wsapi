@@ -25,7 +25,7 @@ class XcdrClient
 {
 
     /**
-     * @array Xcdr client options.
+     * @array Xcdr client options
      */
     protected $options = array();
 
