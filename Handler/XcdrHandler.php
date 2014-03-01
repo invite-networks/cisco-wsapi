@@ -115,7 +115,8 @@ class XcdrHandler
         $data = array(
             'msgHeader' => $msgHeader,
             'format' => $format,
-            'type' => $type,
+            'type' => 'xcdr',
+            'kind' => $type,
             'cdr' => $cdr
         );
 
