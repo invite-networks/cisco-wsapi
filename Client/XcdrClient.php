@@ -10,6 +10,7 @@
  */
 namespace Invite\Component\Cisco\Wsapi\Client;
 
+use Invite\Component\Cisco\Wsapi\Exception\SoapTimeoutException;
 use Invite\Component\Cisco\Wsapi\Client\WsApiClient;
 use Invite\Component\Cisco\Wsapi\Handler\XcdrHandler;
 
@@ -40,10 +41,10 @@ class XcdrClient
         $appName = array_key_exists('appName', $options) ? $options['appName'] : 'invite_xcdr';
         $transactionId = array_key_exists('transactionId', $options) ? $options['transactionId'] : uniqid('xcdr');
 
-        $socket = array_key_exists('socket', $options) ? $options['socket'] : 5;
+        $socket = array_key_exists('socket', $options) ? $options['socket'] : 15;
         ini_set('default_socket_timeout', $socket);
 
-        $connection = array_key_exists('connection', $options) ? $options['connection'] : 5;
+        $connection = array_key_exists('connection', $options) ? $options['connection'] : 15;
         $trace = array_key_exists('trace', $options) ? $options['trace'] : false;
         $exception = array_key_exists('exception', $options) ? $options['exception'] : false;
 
@@ -71,7 +72,23 @@ class XcdrClient
 
         $soapXML = new \SoapVar($soapObjectXML, XSD_ANYXML, null, null, null, $schema);
 
-        $result = $this->soapClient->RequestXcdrRegister($soapXML);
+        try {
+            $result = $this->soapClient->RequestXcdrRegister($soapXML);
+        } catch (SoapTimeoutException $e) {
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'message' => 'XCDR Soap Client Timeout. ' . $e->getMessage(),
+                'class' => get_class($this)
+            );
+        } catch (\Exception $e) {
+            return array(
+                'status' => 'error',
+                'type' => 'exception',
+                'message' => 'XCDR Soap Client Exception. ' . $e->getMessage(),
+                'class' => get_class($this)
+            );
+        }
 
         if (is_soap_fault($result)) {
             return array(
@@ -87,14 +104,8 @@ class XcdrClient
 
         if ($cdrFormat === 'detailed') {
             $cdrResult = $this->requestXcdrSetAttribute($result, $schema);
-            if (is_soap_fault($cdrResult)) {
-                return array(
-                    'status' => 'error',
-                    'type' => 'soap_fault',
-                    'code' => $cdrResult->faultcode,
-                    'message' => $cdrResult->faultstring,
-                    'class' => get_class($this)
-                );
+            if ($cdrResult['status'] === 'error') {
+                return $cdrResult;
             }
         }
 
@@ -121,7 +132,35 @@ class XcdrClient
 
         $soapXML = new \SoapVar($soapObjectXML, XSD_ANYXML, null, null, null, $schema);
 
-        return $this->soapClient->RequestXcdrSetAttribute($soapXML);
+        try {
+            $result = $this->soapClient->RequestXcdrSetAttribute($soapXML);
+        } catch (SoapTimeoutException $e) {
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'message' => 'XCDR Soap Client Timeout. ' . $e->getMessage(),
+                'class' => get_class($this)
+            );
+        } catch (\Exception $e) {
+            return array(
+                'status' => 'error',
+                'type' => 'exception',
+                'message' => 'XCDR Soap Client Exception. ' . $e->getMessage(),
+                'class' => get_class($this)
+            );
+        }
+
+        if (is_soap_fault($result)) {
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'code' => $result->faultcode,
+                'message' => $result->faultstring,
+                'class' => get_class($this)
+            );
+        }
+
+        return $result;
     }
 
 }

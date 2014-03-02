@@ -10,6 +10,8 @@
  */
 namespace Invite\Component\Cisco\Wsapi\Client;
 
+use Invite\Component\Cisco\Wsapi\Exception\SoapTimeoutException;
+
 /**
  * INVITE Cisco IOS WS API Soap Client
  *
@@ -41,7 +43,6 @@ class WsApiClient extends \SoapClient
     function __construct($wsdl, $options, $namespace)
     {
         parent::__construct($wsdl, $options);
-
         $this->namespace = $namespace;
     }
 
@@ -49,13 +50,6 @@ class WsApiClient extends \SoapClient
      * Override PHP SOAP Client __doRequest call to regex Cisco UC Gateway API XML data.
      *
      * NOTE: Leave the SOAP debug commands because they intercept the call better here.
-     *
-     * @param type $request
-     * @param type $location
-     * @param type $action
-     * @param type $version
-     * @param int $oneWay
-     * @return type
      */
     function __doRequest($request, $location, $action, $version, $oneWay = 0)
     {
@@ -73,6 +67,32 @@ class WsApiClient extends \SoapClient
         //var_dump(parent::__getFunctions());
 
         return ($response);
+    }
+
+    public function __soapCall($function, $args, $options)
+    {
+        $time_start = microtime(true);
+        try {
+            $result = parent::__soapCall($function, $args, $options);
+        } catch (\Exception $e) {
+            $time_request = (microtime(true) - $time_start);
+            if (
+                    $e->getMessage() == 'Error Fetching http headers' &&
+                    ini_get('default_socket_timeout') < $time_request
+            ) {
+                throw new SoapTimeoutException(
+                'Soap request most likly timed out.' .
+                ' It took ' . $time_request .
+                ' and the limit is ' . ini_get('default_socket_timeout')
+                );
+            }
+
+            // E: Not a timeout, let's rethrow the original exception
+            throw $e;
+        }
+
+        // All good, no exception from the service or PHP
+        return $result;
     }
 
 }
