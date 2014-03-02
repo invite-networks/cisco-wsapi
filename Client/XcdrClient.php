@@ -74,17 +74,28 @@ class XcdrClient
         try {
             $result = $this->soapClient->RequestXcdrRegister($soapXML);
         } catch (\SoapFault $soapFault) {
-            // TODO figure out what to do here.
-            return $soapFault;
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'message' => 'SoapFault encountered on Xcdr request.',
+                'fault' => $soapFault
+            );
         }
 
         $cdrFormat = array_key_exists('cdr_format', $options) ? $options['cdr_format'] : 'compact';
 
         if ($cdrFormat === 'detailed') {
-            $this->requestXcdrSetAttribute($result, $schema);
+            $cdrResult = $this->requestXcdrSetAttribute($result, $schema);
+            if ($cdrResult['status'] === 'error') {
+                return $cdrResult;
+            }
         }
 
-        return $result;
+        return array(
+            'status' => 'success',
+            'message' => $host . ' registered successfully!',
+            'result' => $result
+        );
     }
 
     /**
@@ -106,11 +117,18 @@ class XcdrClient
         try {
             $this->soapClient->RequestXcdrSetAttribute($soapXML);
         } catch (SoapFault $soapFault) {
-            // TODO figure out what to do here.
-            return $soapFault;
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'message' => 'SoapFault encountered on Xcdr set cdr detail attribute.',
+                'fault' => $soapFault
+            );
         }
 
-        return;
+        return array(
+            'status' => 'success',
+            'message' => 'Detail cdr attribute set successfully.',
+        );
     }
 
 }
