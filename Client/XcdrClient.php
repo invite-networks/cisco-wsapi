@@ -71,23 +71,39 @@ class XcdrClient
 
         $soapXML = new \SoapVar($soapObjectXML, XSD_ANYXML, null, null, null, $schema);
 
-        try {
-            $result = $this->soapClient->RequestXcdrRegister($soapXML);
-        } catch (\SoapFault $soapFault) {
+        $result = $this->soapClient->RequestXcdrRegister($soapXML);
+
+        if (is_soap_fault($result)) {
             return array(
                 'status' => 'error',
                 'type' => 'soap_fault',
-                'message' => 'SoapFault encountered on Xcdr request.',
-                'fault' => $soapFault
+                'code' => $result->faultcode,
+                'message' => $result->faultstring
             );
         }
+
+        /* try {
+          $result = $this->soapClient->RequestXcdrRegister($soapXML);
+          } catch (\SoapFault $soapFault) {
+          return array(
+          'status' => 'error',
+          'type' => 'soap_fault',
+          'message' => 'SoapFault encountered on Xcdr request.',
+          'fault' => $soapFault
+          );
+          } */
 
         $cdrFormat = array_key_exists('cdr_format', $options) ? $options['cdr_format'] : 'compact';
 
         if ($cdrFormat === 'detailed') {
             $cdrResult = $this->requestXcdrSetAttribute($result, $schema);
-            if ($cdrResult['status'] === 'error') {
-                return $cdrResult;
+            if (is_soap_fault($cdrResult)) {
+                return array(
+                    'status' => 'error',
+                    'type' => 'soap_fault',
+                    'code' => $cdrResult->faultcode,
+                    'message' => $cdrResult->faultstring
+                );
             }
         }
 
@@ -114,21 +130,7 @@ class XcdrClient
 
         $soapXML = new \SoapVar($soapObjectXML, XSD_ANYXML, null, null, null, $schema);
 
-        try {
-            $this->soapClient->RequestXcdrSetAttribute($soapXML);
-        } catch (SoapFault $soapFault) {
-            return array(
-                'status' => 'error',
-                'type' => 'soap_fault',
-                'message' => 'SoapFault encountered on Xcdr set cdr detail attribute.',
-                'fault' => $soapFault
-            );
-        }
-
-        return array(
-            'status' => 'success',
-            'message' => 'Detail cdr attribute set successfully.',
-        );
+        return $this->soapClient->RequestXcdrSetAttribute($soapXML);
     }
 
 }

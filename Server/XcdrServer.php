@@ -56,11 +56,12 @@ class XcdrServer
             ob_start();
             $soapServer->handle();
         } catch (\Exception $e) {
-            //  Not sure yet what to do here? prob throw exception? 
-            $code = $e->getCode();
-            $message = $e->getMessage();
-            $error = sprintf('code:%s message:%s', $code, $message);
-            return $error;
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'code' => $e->getCode(),
+                'message' => $e->getMessage()
+            );
         }
 
         $result = ob_get_clean();
@@ -74,7 +75,10 @@ class XcdrServer
         $result8 = preg_replace('/<\/env:Body>/', '</soapenv:Body>', $result7);
         $result9 = preg_replace('/\senv:encodingStyle.*soap-encoding"/', '', $result8);
 
-        return $result9;
+        return array(
+            'status' => 'success',
+            'result' => $result9
+        );
     }
 
 }
