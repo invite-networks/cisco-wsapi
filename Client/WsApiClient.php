@@ -74,11 +74,11 @@ class WsApiClient extends \SoapClient
         return ($response);
     }
 
-    public function __soapCall($function, $args, $options = null, $input = null, &$output = null)
+    public function __soapCall($function_name, $arguments, $options = NULL, $input_headers = NULL, &$output_headers = NULL)
     {
         $timeStart = microtime(true);
         try {
-            $result = parent::__soapCall($function, $args, $options, $input, $output);
+            $result = parent::__soapCall($function_name, $arguments, $options = NULL, $input_headers = NULL, $output_headers = NULL);
         } catch (\Exception $e) {
             $timeRequest = (microtime(true) - $timeStart);
             if (
