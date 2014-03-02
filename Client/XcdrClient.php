@@ -160,7 +160,10 @@ class XcdrClient
             );
         }
 
-        return $result;
+        return array(
+            'status' => 'success',
+            'result' => $result
+        );
     }
 
 }
