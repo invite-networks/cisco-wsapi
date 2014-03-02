@@ -25,42 +25,27 @@ class XcdrClient
 {
 
     /**
-     * @array Xcdr client options
-     */
-    protected $options = array();
-
-    /**
      * @var \Invite\Component\Cisco\Wsapi\Soap\Client\WsApiSoapClient
      */
     protected $soapClient;
 
     /**
-     * Xcdr Soap client construct.
-     * 
-     * @param array of client setup parameters $options
-     */
-    public function __construct(array$options)
-    {
-        $this->options = $options;
-    }
-
-    /**
      * Cisco IOS XCDR Provider Registration
      */
-    public function requestXcdrRegister($host, $appUrl)
+    public function requestXcdrRegister($host, $appUrl, array$options = array())
     {
-        $protocol = array_key_exists('protocol', $this->options) ? $this->options['protocol'] : 'http';
+        $protocol = array_key_exists('protocol', $options) ? $options['protocol'] : 'http';
         $url = $protocol . '://' . $host . ':8090/cisco_xcdr';
         $schema = XcdrHandler::XCDR_SCHEMA;
-        $appName = $this->options['app_name'];
-        $uniqueId = uniqid('xcdr');
+        $appName = array_key_exists('appName', $options) ? $options['appName'] : 'invite_xcdr';
+        $transactionId = array_key_exists('transactionId', $options) ? $options['transactionId'] : uniqid('xcdr');
 
-        $socket = array_key_exists('socket', $this->options) ? $this->options['socket'] : 5;
+        $socket = array_key_exists('socket', $options) ? $options['socket'] : 5;
         ini_set('default_socket_timeout', $socket);
 
-        $connection = array_key_exists('connection', $this->options) ? $this->options['connection'] : 5;
-        $trace = array_key_exists('trace', $this->options) ? $this->options['trace'] : false;
-        $exception = array_key_exists('exception', $this->options) ? $this->options['exception'] : false;
+        $connection = array_key_exists('connection', $options) ? $options['connection'] : 5;
+        $trace = array_key_exists('trace', $options) ? $options['trace'] : false;
+        $exception = array_key_exists('exception', $options) ? $options['exception'] : false;
 
         $this->soapClient = new WsApiClient(null, array(
             "location" => $url,
@@ -77,7 +62,7 @@ class XcdrClient
                                 <url>' . $appUrl . '</url>
                             </applicationData>
                             <msgHeader>
-                                <transactionID>' . $uniqueId . '</transactionID>
+                                <transactionID>' . $transactionId . '</transactionID>
                             </msgHeader>
                             <providerData>
                                 <url>' . $url . '</url>
@@ -93,7 +78,7 @@ class XcdrClient
             return $soapFault;
         }
 
-        $cdrFormat = array_key_exists('cdr_format', $this->options) ? $this->options['cdr_format'] : 'compact';
+        $cdrFormat = array_key_exists('cdr_format', $options) ? $options['cdr_format'] : 'compact';
 
         if ($cdrFormat === 'detailed') {
             $this->requestXcdrSetAttribute($result, $schema);
