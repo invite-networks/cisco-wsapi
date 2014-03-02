@@ -78,20 +78,10 @@ class XcdrClient
                 'status' => 'error',
                 'type' => 'soap_fault',
                 'code' => $result->faultcode,
-                'message' => $result->faultstring
+                'message' => $result->faultstring,
+                'class' => get_class($this)
             );
         }
-
-        /* try {
-          $result = $this->soapClient->RequestXcdrRegister($soapXML);
-          } catch (\SoapFault $soapFault) {
-          return array(
-          'status' => 'error',
-          'type' => 'soap_fault',
-          'message' => 'SoapFault encountered on Xcdr request.',
-          'fault' => $soapFault
-          );
-          } */
 
         $cdrFormat = array_key_exists('cdr_format', $options) ? $options['cdr_format'] : 'compact';
 
@@ -102,7 +92,8 @@ class XcdrClient
                     'status' => 'error',
                     'type' => 'soap_fault',
                     'code' => $cdrResult->faultcode,
-                    'message' => $cdrResult->faultstring
+                    'message' => $cdrResult->faultstring,
+                    'class' => get_class($this)
                 );
             }
         }

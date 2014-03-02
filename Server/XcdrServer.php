@@ -60,7 +60,8 @@ class XcdrServer
                 'status' => 'error',
                 'type' => 'soap_fault',
                 'code' => $e->getCode(),
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'class' => get_class($this)
             );
         }
 
