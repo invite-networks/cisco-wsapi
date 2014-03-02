@@ -41,10 +41,10 @@ class XcdrClient
         $appName = array_key_exists('appName', $options) ? $options['appName'] : 'invite_xcdr';
         $transactionId = array_key_exists('transactionId', $options) ? $options['transactionId'] : uniqid('xcdr');
 
-        $socket = array_key_exists('socket', $options) ? $options['socket'] : 15;
+        $socket = array_key_exists('socket', $options) ? $options['socket'] : 25;
         ini_set('default_socket_timeout', $socket);
 
-        $connection = array_key_exists('connection', $options) ? $options['connection'] : 15;
+        $connection = array_key_exists('connection', $options) ? $options['connection'] : 25;
         $trace = array_key_exists('trace', $options) ? $options['trace'] : false;
         $exception = array_key_exists('exception', $options) ? $options['exception'] : false;
 

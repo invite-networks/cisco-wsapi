@@ -59,39 +59,44 @@ class WsApiClient extends \SoapClient
 
         $response = parent::__doRequest($request3, $location, $action, $version, $oneWay = 0);
 
-        // ******* SOAP DEBUG COMMANDS **************
+        // *************** SOAP DEBUG COMMANDS **************
+        // 
+        // --note: trace must be set to true on client request.
+        // 
         // echo "REQUEST HEADERS:\n<br>" . parent::__getLastRequestHeaders() . "\n<br>";
         // echo "REQUEST:\n<br>" . parent::__getLastRequest() . "\n<br>";
         // echo "RESPONSE HEADERS:\n<br>" . parent::__getLastResponseHeaders() . "\n<br>";
         // echo "RESPONSE:\n<br>" . parent::__getLastResponse() . "\n<br>";
-        //var_dump(parent::__getFunctions());
+        // var_dump(parent::__getFunctions());
+        //
+        // *************************************************
 
         return ($response);
     }
 
-    public function __soapCall($function, $args, $options)
+    public function __soapCall($function, $args, $options = null, $input = null, &$output = null)
     {
-        $time_start = microtime(true);
+        $timeStart = microtime(true);
         try {
-            $result = parent::__soapCall($function, $args, $options);
+            $result = parent::__soapCall($function, $args, $options, $input, $output);
         } catch (\Exception $e) {
-            $time_request = (microtime(true) - $time_start);
+            $timeRequest = (microtime(true) - $timeStart);
             if (
                     $e->getMessage() == 'Error Fetching http headers' &&
-                    ini_get('default_socket_timeout') < $time_request
+                    ini_get('default_socket_timeout') < $timeRequest
             ) {
                 throw new SoapTimeoutException(
                 'Soap request most likly timed out.' .
-                ' It took ' . $time_request .
+                ' It took ' . $timeRequest .
                 ' and the limit is ' . ini_get('default_socket_timeout')
                 );
             }
 
-            // E: Not a timeout, let's rethrow the original exception
+            // E: Not a timeout, rethrow the original exception
             throw $e;
         }
 
-        // All good, no exception from the service or PHP
+        // No exception from the service or PHP
         return $result;
     }
 
