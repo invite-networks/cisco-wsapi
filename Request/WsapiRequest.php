@@ -26,8 +26,8 @@ abstract class WsapiRequest implements WsapiRequestInterface
 {
 
     protected $msgHeader;
-    protected $registrationId;
-    protected $transactionId;
+    protected $registrationID;
+    protected $transactionID;
     protected $applicationData;
     protected $applicationUrl;
     protected $providerData;
@@ -57,8 +57,8 @@ abstract class WsapiRequest implements WsapiRequestInterface
     protected function probing($msgHeader, $sequence, $interval, $failureCount, $registered, $providerStatus)
     {
         $this->msgHeader = $msgHeader;
-        $this->registrationId = $msgHeader->registrationId;
-        $this->transactionId = $msgHeader->transactionId;
+        $this->registrationID = $msgHeader->registrationID;
+        $this->transactionID = $msgHeader->transactionID;
         $this->sequence = $sequence;
         $this->interval = $interval;
         $this->failureCount = $failureCount;
@@ -67,8 +67,8 @@ abstract class WsapiRequest implements WsapiRequestInterface
 
         $soapObjXML =
                 '<msgHeader>
-                    <registrationID>' . $this->registrationId . '</registrationID>
-                    <transactionID>' . $this->transactionId . '</transactionID>
+                    <registrationID>' . $this->registrationID . '</registrationID>
+                    <transactionID>' . $this->transactionID . '</transactionID>
                 </msgHeader>
                 <sequence>' . $this->sequence . '</sequence>'
         ;
@@ -84,13 +84,13 @@ abstract class WsapiRequest implements WsapiRequestInterface
     protected function unregister($msgHeader)
     {
         $this->msgHeader = $msgHeader;
-        $this->registrationId = $msgHeader->registrationId;
-        $this->transactionId = $msgHeader->transactionId;
+        $this->registrationID = $msgHeader->registrationID;
+        $this->transactionID = $msgHeader->transactionID;
 
         $soapObjXML =
                 '<msgHeader>
-                    <registrationID>' . $this->registrationId . '</registrationID>
-                    <transactionID>' . $this->transactionId . '</transactionID>
+                    <registrationID>' . $this->registrationID . '</registrationID>
+                    <transactionID>' . $this->transactionID . '</transactionID>
                 </msgHeader>'
         ;
 
@@ -105,7 +105,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
     protected function status($msgHeader, $applicationData, $providerData, $providerStatus)
     {
         $this->msgHeader = $msgHeader;
-        $this->transactionId = $msgHeader->transactionId;
+        $this->transactionID = $msgHeader->transactionID;
         $this->applicationData = $applicationData;
         $this->applicationUrl = $applicationData->url;
         $this->providerData = $providerData;
@@ -126,7 +126,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
     /**
      * @return string
      */
-    public function getRegistrationId()
+    public function getregistrationID()
     {
         return $this->registrationID;
     }
@@ -134,7 +134,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
     /**
      * @return string
      */
-    public function getTransactionId()
+    public function gettransactionID()
     {
         return $this->transactionID;
     }

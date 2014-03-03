@@ -93,8 +93,8 @@ class XcdrRequest extends WsapiRequest
     public function NotifyXcdrRecord($msgHeader, $format, $type, $cdr)
     {
         $this->msgHeader = $msgHeader;
-        $this->registrationId = $msgHeader->registrationId;
-        $this->transactionId = $msgHeader->transactionId;
+        $this->registrationID = $msgHeader->registrationID;
+        $this->transactionID = $msgHeader->transactionID;
         $this->cdrFormat = $format;
         $this->cdrType = $type;
         $this->cdrRecord = $cdr;

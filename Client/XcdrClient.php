@@ -39,7 +39,7 @@ class XcdrClient
         $url = $protocol . '://' . $host . ':8090/cisco_xcdr';
         $schema = XcdrRequest::XCDR_SCHEMA;
         $appName = array_key_exists('appName', $options) ? $options['appName'] : 'invite_xcdr';
-        $transactionId = array_key_exists('transactionId', $options) ? $options['transactionId'] : uniqid('xcdr');
+        $transactionID = array_key_exists('transactionID', $options) ? $options['transactionID'] : uniqid('xcdr');
 
         $socket = array_key_exists('socket', $options) ? $options['socket'] : 25;
         ini_set('default_socket_timeout', $socket);
@@ -63,7 +63,7 @@ class XcdrClient
                                 <url>' . $appUrl . '</url>
                             </applicationData>
                             <msgHeader>
-                                <transactionID>' . $transactionId . '</transactionID>
+                                <transactionID>' . $transactionID . '</transactionID>
                             </msgHeader>
                             <providerData>
                                 <url>' . $url . '</url>
