@@ -70,8 +70,9 @@ class WsapiServer
         $result7 = preg_replace('/<\/env:Envelope>/', '</soapenv:Envelope>', $result6);
         $result8 = preg_replace('/<\/env:Body>/', '</soapenv:Body>', $result7);
         $result9 = preg_replace('/\senv:encodingStyle.*soap-encoding"/', '', $result8);
+        $result10 = preg_replace('/Solicit' . ucfirst($type) . 'ProviderUnRegisterResponse/', 'Response' . ucfirst($type) . 'ProviderUnRegister', $result9);
 
-        return $result9;
+        return $result10;
     }
 
 }
