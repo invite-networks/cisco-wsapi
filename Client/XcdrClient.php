@@ -12,7 +12,7 @@ namespace Invite\Component\Cisco\Wsapi\Client;
 
 use Invite\Component\Cisco\Wsapi\Exception\SoapTimeoutException;
 use Invite\Component\Cisco\Wsapi\Client\WsApiClient;
-use Invite\Component\Cisco\Wsapi\Handler\XcdrHandler;
+use Invite\Component\Cisco\Wsapi\Request\XcdrRequest;
 
 /**
  * INVITE Cisco WsApi XCDR Client
@@ -37,7 +37,7 @@ class XcdrClient
     {
         $protocol = array_key_exists('protocol', $options) ? $options['protocol'] : 'http';
         $url = $protocol . '://' . $host . ':8090/cisco_xcdr';
-        $schema = XcdrHandler::XCDR_SCHEMA;
+        $schema = XcdrRequest::XCDR_SCHEMA;
         $appName = array_key_exists('appName', $options) ? $options['appName'] : 'invite_xcdr';
         $transactionId = array_key_exists('transactionId', $options) ? $options['transactionId'] : uniqid('xcdr');
 

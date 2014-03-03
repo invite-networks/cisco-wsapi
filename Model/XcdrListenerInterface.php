@@ -56,5 +56,5 @@ interface XcdrListenerInterface
      * 
      * @param array $data Must be md array with csv key.
      */
-    public function processCdrRecord(XcdrRequest $cdrRequest);
+    public function processRecord(XcdrRequest $recordRequest);
 }
