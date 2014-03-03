@@ -117,6 +117,75 @@ class XcdrClient
     }
 
     /**
+     * Cisco IOS XCDR Provider Registration
+     */
+    public function requestXcdrUnRegister($host, $regId, $transId, array$options = array())
+    {
+        $protocol = array_key_exists('protocol', $options) ? $options['protocol'] : 'http';
+        $url = $protocol . '://' . $host . ':8090/cisco_xcdr';
+        $schema = XcdrHandler::XCDR_SCHEMA;
+
+        $socket = array_key_exists('socket', $options) ? $options['socket'] : 25;
+        ini_set('default_socket_timeout', $socket);
+
+        $connection = array_key_exists('connection', $options) ? $options['connection'] : 25;
+        $trace = array_key_exists('trace', $options) ? $options['trace'] : false;
+        $exception = array_key_exists('exception', $options) ? $options['exception'] : false;
+
+        $this->soapClient = new WsApiClient(null, array(
+            "location" => $url,
+            "uri" => $schema,
+            "soap_version" => SOAP_1_2,
+            "connection_timeout" => $connection,
+            "trace" => $trace,
+            "exception" => $exception
+                ), $schema // Used to send API namespace to SOAP Client
+        );
+
+        $soapObjectXML = '<msgHeader>
+                            <transactionID>' . $transId . '</transactionID>
+                            <registrationID>' . $regId . '</registrationID>
+                          </msgHeader>'
+        ;
+
+        $soapXML = new \SoapVar($soapObjectXML, XSD_ANYXML, null, null, null, $schema);
+
+        try {
+            $result = $this->soapClient->RequestXcdrUnRegister($soapXML);
+        } catch (SoapTimeoutException $e) {
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'message' => 'XCDR Soap Client Timeout. ' . $e->getMessage(),
+                'class' => get_class($this)
+            );
+        } catch (\Exception $e) {
+            return array(
+                'status' => 'error',
+                'type' => 'exception',
+                'message' => 'XCDR Soap Client Exception. ' . $e->getMessage(),
+                'class' => get_class($this)
+            );
+        }
+
+        if (is_soap_fault($result)) {
+            return array(
+                'status' => 'error',
+                'type' => 'soap_fault',
+                'code' => $result->faultcode,
+                'message' => $result->faultstring,
+                'class' => get_class($this)
+            );
+        }
+
+        return array(
+            'status' => 'success',
+            'message' => $host . ' unregistered successfully!',
+            'result' => $result
+        );
+    }
+
+    /**
      * Cisco IOS XCDRProvider Set Attribute Request
      */
     private function requestXcdrSetAttribute($result, $schema)
