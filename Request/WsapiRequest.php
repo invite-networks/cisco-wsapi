@@ -26,8 +26,12 @@ abstract class WsapiRequest implements WsapiRequestInterface
 {
 
     protected $msgHeader;
+    protected $registrationId;
+    protected $transactionId;
     protected $applicationData;
+    protected $applicationUrl;
     protected $providerData;
+    protected $providerUrl;
     protected $schema;
     protected $sequence;
     protected $interval;
@@ -53,6 +57,8 @@ abstract class WsapiRequest implements WsapiRequestInterface
     protected function probing($msgHeader, $sequence, $interval, $failureCount, $registered, $providerStatus)
     {
         $this->msgHeader = $msgHeader;
+        $this->registrationId = $msgHeader->registrationId;
+        $this->transactionId = $msgHeader->transactionId;
         $this->sequence = $sequence;
         $this->interval = $interval;
         $this->failureCount = $failureCount;
@@ -61,13 +67,13 @@ abstract class WsapiRequest implements WsapiRequestInterface
 
         $soapObjXML =
                 '<msgHeader>
-                    <registrationID>' . $this->getRegistrationId() . '</registrationID>
-                    <transactionID>' . $this->getTransactionId() . '</transactionID>
+                    <registrationID>' . $this->registrationId . '</registrationID>
+                    <transactionID>' . $this->transactionId . '</transactionID>
                 </msgHeader>
-                <sequence>' . $this->getSequence() . '</sequence>'
+                <sequence>' . $this->sequence . '</sequence>'
         ;
 
-        $soapXML = new \SoapVar($soapObjXML, XSD_ANYXML, null, null, null, $this->getSchema());
+        $soapXML = new \SoapVar($soapObjXML, XSD_ANYXML, null, null, null, $this->schema);
 
         return $soapXML;
     }
@@ -78,15 +84,17 @@ abstract class WsapiRequest implements WsapiRequestInterface
     protected function unregister($msgHeader)
     {
         $this->msgHeader = $msgHeader;
+        $this->registrationId = $msgHeader->registrationId;
+        $this->transactionId = $msgHeader->transactionId;
 
         $soapObjXML =
                 '<msgHeader>
-                    <registrationID>' . $this->getRegistrationId() . '</registrationID>
-                    <transactionID>' . $this->getTransactionId() . '</transactionID>
+                    <registrationID>' . $this->registrationId . '</registrationID>
+                    <transactionID>' . $this->transactionId . '</transactionID>
                 </msgHeader>'
         ;
 
-        $soapXML = new \SoapVar($soapObjXML, XSD_ANYXML, null, null, null, $this->getSchema());
+        $soapXML = new \SoapVar($soapObjXML, XSD_ANYXML, null, null, null, $this->schema);
 
         return $soapXML;
     }
@@ -97,8 +105,11 @@ abstract class WsapiRequest implements WsapiRequestInterface
     protected function status($msgHeader, $applicationData, $providerData, $providerStatus)
     {
         $this->msgHeader = $msgHeader;
+        $this->transactionId = $msgHeader->transactionId;
         $this->applicationData = $applicationData;
+        $this->applicationUrl = $applicationData->url;
         $this->providerData = $providerData;
+        $this->providerUrl = $providerData->url;
         $this->providerStatus = $providerStatus;
 
         return;
@@ -117,10 +128,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
      */
     public function getRegistrationId()
     {
-        if (!$this->msgHeader) return;
-        if (!isset($this->msgHeader->registrationID)) return;
-
-        return $this->msgHeader->registrationID;
+        return $this->registrationID;
     }
 
     /**
@@ -128,10 +136,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
      */
     public function getTransactionId()
     {
-        if (!$this->msgHeader) return;
-        if (!isset($this->msgHeader->transactionID)) return;
-
-        return $this->msgHeader->transactionID;
+        return $this->transactionID;
     }
 
     /**
@@ -147,10 +152,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
      */
     public function getApplicationUrl()
     {
-        if (!$this->applicationData) return;
-        if (!isset($this->applicationData->url)) return;
-
-        return $this->applicationData->url;
+        return $this->applicationUrl;
     }
 
     /**
@@ -166,10 +168,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
      */
     public function getProviderUrl()
     {
-        if (!$this->providerData) return;
-        if (!isset($this->providerData->url)) return;
-
-        return $this->providerData->url;
+        return $this->providerUrl;
     }
 
     /**
@@ -260,6 +259,15 @@ abstract class WsapiRequest implements WsapiRequestInterface
     public function isValid()
     {
         return $this->valid;
+    }
+
+    /**
+     * @return string
+     */
+    public function setValid($valid)
+    {
+        $this->valid = $valid;
+        return $this;
     }
 
     /**

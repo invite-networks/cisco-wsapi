@@ -32,7 +32,7 @@ interface XcdrListenerInterface
      * 
      * @param array $data
      */
-    public function processProbing(WsapiRequestInterface $probingRequest);
+    public function processProbing(WsapiRequestInterface $probingRequest, $responseXml);
 
     /**
      * Implementing class must provide method to
@@ -40,7 +40,7 @@ interface XcdrListenerInterface
      * 
      * @param array $data
      */
-    public function processStatus(WsapiRequestInterface $statusRequest);
+    public function processStatus(WsapiRequestInterface $statusRequest, $responseXml = null);
 
     /**
      * Implementing class must provide method to
@@ -48,7 +48,7 @@ interface XcdrListenerInterface
      * 
      * @param array $data Must be md array with csv key.
      */
-    public function processUnregister(WsapiRequestInterface $unregisterRequest);
+    public function processUnregister(WsapiRequestInterface $unregisterRequest, $responseXml);
 
     /**
      * Implementing class must provide method to
@@ -56,5 +56,5 @@ interface XcdrListenerInterface
      * 
      * @param array $data Must be md array with csv key.
      */
-    public function processRecord(XcdrRequest $recordRequest);
+    public function processRecord(XcdrRequest $recordRequest, $responseXml = null);
 }

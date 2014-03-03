@@ -56,11 +56,11 @@ class XcdrRequest extends WsapiRequest
      */
     public function SolicitXcdrProbing($msgHeader, $sequence, $interval, $failureCount, $registered, $providerStatus)
     {
-        $result = $this->probing($msgHeader, $sequence, $interval, $failureCount, $registered, $providerStatus);
-        $this->listener->processProbing($this);
+        $responseXml = $this->probing($msgHeader, $sequence, $interval, $failureCount, $registered, $providerStatus);
+        $response = $this->listener->processProbing($this, $responseXml);
 
-        if (!$this->isValid) return;
-        return $result;
+        if (!$this->isValid()) return;
+        return $response;
     }
 
     /**
@@ -68,11 +68,11 @@ class XcdrRequest extends WsapiRequest
      */
     public function SolicitXcdrProviderUnRegister($msgHeader)
     {
-        $result = $this->unregister($msgHeader);
-        $this->listener->processUnregister($this);
+        $responseXml = $this->unregister($msgHeader);
+        $response = $this->listener->processUnregister($this, $responseXml);
 
-        if (!$this->isValid) return;
-        return $result;
+        if (!$this->isValid()) return;
+        return $response;
     }
 
     /**
@@ -80,10 +80,11 @@ class XcdrRequest extends WsapiRequest
      */
     public function NotifyXcdrStatus($msgHeader, $applicationData, $providerData, $providerStatus)
     {
-        $result = $this->status($msgHeader, $applicationData, $providerData, $providerStatus);
-        $this->listener->processStatus($this);
+        $responseXml = $this->status($msgHeader, $applicationData, $providerData, $providerStatus);
+        $response = $this->listener->processStatus($this, $responseXml);
 
-        return $result;
+        if (!$this->isValid()) return;
+        return $response;
     }
 
     /**
@@ -92,13 +93,16 @@ class XcdrRequest extends WsapiRequest
     public function NotifyXcdrRecord($msgHeader, $format, $type, $cdr)
     {
         $this->msgHeader = $msgHeader;
+        $this->registrationId = $msgHeader->registrationId;
+        $this->transactionId = $msgHeader->transactionId;
         $this->cdrFormat = $format;
         $this->cdrType = $type;
         $this->cdrRecord = $cdr;
 
-        $this->listener->processRecord($this);
+        $response = $this->listener->processRecord($this, null);
 
-        return;
+        if (!$this->isValid()) return;
+        return $response;
     }
 
     /**
