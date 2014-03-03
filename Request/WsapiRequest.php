@@ -62,7 +62,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
         $soapObjXML =
                 '<msgHeader>
                     <registrationID>' . $this->getRegistrationId() . '</registrationID>
-                    <transactionID>' . $this->getTranactionId() . '</transactionID>
+                    <transactionID>' . $this->getTransactionId() . '</transactionID>
                 </msgHeader>
                 <sequence>' . $this->getSequence() . '</sequence>'
         ;
@@ -82,7 +82,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
         $soapObjXML =
                 '<msgHeader>
                     <registrationID>' . $this->getRegistrationId() . '</registrationID>
-                    <transactionID>' . $this->getTranactionId() . '</transactionID>
+                    <transactionID>' . $this->getTransactionId() . '</transactionID>
                 </msgHeader>'
         ;
 
