@@ -109,10 +109,10 @@ class XcdrClient
             }
         }
 
-        $result['app_name'] = $appName;
-        $result['app_url'] = $appUrl;
+        $result['app.name'] = $appName;
+        $result['app.url'] = $appUrl;
         $result['schema'] = $schema;
-        $result['provider_url'] = $url;
+        $result['provider.url'] = $url;
 
         return array(
             'status' => 'success',

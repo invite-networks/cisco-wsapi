@@ -126,12 +126,12 @@ abstract class WsapiRequest implements WsapiRequestInterface
     /**
      * @return string
      */
-    public function getTranactionId()
+    public function getTransactionId()
     {
         if (!$this->msgHeader) return;
-        if (!isset($this->msgHeader->tranactionID)) return;
+        if (!isset($this->msgHeader->transactionID)) return;
 
-        return $this->msgHeader->tranactionID;
+        return $this->msgHeader->transactionID;
     }
 
     /**
