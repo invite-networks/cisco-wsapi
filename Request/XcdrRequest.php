@@ -129,4 +129,12 @@ class XcdrRequest extends WsapiRequest
         return $this->cdrRecord;
     }
 
+    /**
+     * @return std Object
+     */
+    public function getCdrProvider()
+    {
+        return 'xcdr';
+    }
+
 }

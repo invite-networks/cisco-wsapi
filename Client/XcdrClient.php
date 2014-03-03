@@ -124,7 +124,7 @@ class XcdrClient
     /**
      * Cisco IOS XCDR Provider Registration
      */
-    public function requestXcdrUnRegister($host, $regId, $transId, array$options = array())
+    public function requestXcdrUnRegister($host, $registrationID, $transactionID, array$options = array())
     {
         $protocol = array_key_exists('protocol', $options) ? $options['protocol'] : 'http';
         $url = $protocol . '://' . $host . ':8090/cisco_xcdr';
@@ -148,8 +148,8 @@ class XcdrClient
         );
 
         $soapObjectXML = '<msgHeader>
-                            <transactionID>' . $transId . '</transactionID>
-                            <registrationID>' . $regId . '</registrationID>
+                            <transactionID>' . $transactionID . '</transactionID>
+                            <registrationID>' . $registrationID . '</registrationID>
                           </msgHeader>'
         ;
 

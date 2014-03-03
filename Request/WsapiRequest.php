@@ -126,7 +126,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
     /**
      * @return string
      */
-    public function getregistrationID()
+    public function getRegistrationID()
     {
         return $this->registrationID;
     }
@@ -134,7 +134,7 @@ abstract class WsapiRequest implements WsapiRequestInterface
     /**
      * @return string
      */
-    public function gettransactionID()
+    public function getTransactionID()
     {
         return $this->transactionID;
     }
