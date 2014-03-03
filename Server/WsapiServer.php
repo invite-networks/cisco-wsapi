@@ -11,7 +11,7 @@
 namespace Invite\Component\Cisco\Wsapi\Server;
 
 use Invite\Component\Cisco\Wsapi\Model\XcdrListenerInterface;
-use Invite\Component\Cisco\Wsapi\Handler\XcdrHandler;
+use Invite\Component\Cisco\Wsapi\Request\XcdrRequest;
 
 /**
  * XcdrServer.
@@ -24,9 +24,10 @@ class WsapiServer
     /**
      * Xcdr Soap Webservice method.
      */
-    public function processXcdr(XcdrListenerInterface $xcdrListener)
+    public function processXcdr(XcdrListenerInterface $listener, array$options = array())
     {
-        $schema = XcdrHandler::XCDR_SCHEMA;
+        $xcdrRequest = new XcdrRequest($listener, $options);
+        $schema = $xcdrRequest->getSchema();
 
         ini_set("soap.wsdl_cache_enabled", "0");
 
@@ -35,7 +36,7 @@ class WsapiServer
             'soap_version' => SOAP_1_2,
         ));
 
-        $soapServer->setObject(new XcdrHandler($xcdrListener));
+        $soapServer->setObject($xcdrRequest);
 
         try {
             ob_start();
@@ -58,7 +59,7 @@ class WsapiServer
         );
     }
 
-    public function filterResponse($result, $schema, $type)
+    protected function filterResponse($result, $schema, $type)
     {
         $result1 = preg_replace('/<ns1:(\w+)/', '<$1 xmlns="' . $schema . '"', $result, 1);
         $result2 = preg_replace('/<\/ns1:(\w+)/', '</$1', $result1);

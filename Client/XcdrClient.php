@@ -109,6 +109,11 @@ class XcdrClient
             }
         }
 
+        $result['app_name'] = $appName;
+        $result['app_url'] = $appUrl;
+        $result['schema'] = $schema;
+        $result['provider_url'] = $url;
+
         return array(
             'status' => 'success',
             'message' => $host . ' registered successfully!',

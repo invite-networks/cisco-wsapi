@@ -8,13 +8,10 @@
  * please view the LICENSE file that was distributed 
  * with this source code.
  */
-namespace Invite\Component\Cisco\Wsapi\Model;
-
-use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
-use Invite\Component\Cisco\Wsapi\Request\XcdrRequest;
+namespace Invite\Component\Cisco\Wsapi\Request;
 
 /**
- * INVITE WsApi Xcdr Cdr Interface.
+ * INVITE WsapiRequestInterface
  *
  * Must be implemented to rec csv data from Xcdr api.
  * 
@@ -23,38 +20,7 @@ use Invite\Component\Cisco\Wsapi\Request\XcdrRequest;
  * @version    Release: @package_version@
  * @since      Class available since Release 1.1.0
  */
-interface XcdrListenerInterface
+interface WsapiRequestInterface
 {
-
-    /**
-     * Implementing class must provide method to
-     * process probing updates.
-     * 
-     * @param array $data
-     */
-    public function processProbing(WsapiRequestInterface $probingRequest);
-
-    /**
-     * Implementing class must provide method to
-     * process status update.
-     * 
-     * @param array $data
-     */
-    public function processStatus(WsapiRequestInterface $statusRequest);
-
-    /**
-     * Implementing class must provide method to
-     * process unregister msg.
-     * 
-     * @param array $data Must be md array with csv key.
-     */
-    public function processUnregister(WsapiRequestInterface $unregisterRequest);
-
-    /**
-     * Implementing class must provide method to
-     * set csv data in class.
-     * 
-     * @param array $data Must be md array with csv key.
-     */
-    public function processCdrRecord(XcdrRequest $cdrRequest);
+    
 }

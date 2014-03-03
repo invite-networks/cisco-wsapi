@@ -47,7 +47,7 @@ class XcdrRequest extends WsapiRequest
     public function __construct(XcdrListenerInterface $listener, array$options = array())
     {
         parent::__construct($options);
-        $this->xcdrListener = $listener;
+        $this->listener = $listener;
         $this->schema = self::XCDR_SCHEMA;
     }
 
@@ -96,7 +96,7 @@ class XcdrRequest extends WsapiRequest
         $this->cdrType = $type;
         $this->cdrRecord = $cdr;
 
-        $this->listener->processCdrRecord($this);
+        $this->listener->processRecord($this);
 
         return;
     }

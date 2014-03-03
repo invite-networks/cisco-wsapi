@@ -12,6 +12,8 @@
  */
 namespace Invite\Component\Cisco\Wsapi\Request;
 
+use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
+
 /**
  * INVITE WsApi Request Abstract class.
  *
@@ -20,7 +22,7 @@ namespace Invite\Component\Cisco\Wsapi\Request;
  * @version    Release: @package_version@
  * @since      Class available since Release 1.1.0
  */
-abstract class WsapiRequest
+abstract class WsapiRequest implements WsapiRequestInterface
 {
 
     protected $msgHeader;
