@@ -14,7 +14,9 @@ use Invite\Component\Cisco\Wsapi\Model\XcdrListenerInterface;
 use Invite\Component\Cisco\Wsapi\Request\XcdrRequest;
 
 /**
- * XcdrServer.
+ * XcdrServer
+ *
+ * Process all Wsapi Xcdr SOAP Requests.
  *
  * @author Josh Whiting <josh@invitenetworks.com>
  */
