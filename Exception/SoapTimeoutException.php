@@ -13,6 +13,9 @@ namespace Invite\Component\Cisco\Wsapi\Exception;
 /**
  * SoapTimeoutException
  *
+ * This class is throw to help catch SOAP client
+ * timeout issues.
+ *
  * @category   API
  * @author     Josh Whiting <josh@invitenetworks.com>
  * @version    Release: @package_version@
